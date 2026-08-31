@@ -1,0 +1,18 @@
+{
+  "logos": {
+    "left": {
+      "file": "assets/logo_left.png",
+      "width": 200,
+      "height": 42,
+      "offsetX": 1,
+      "offsetY": -200022
+    },
+    "right": {
+      "file": "assets/logo-right.png",
+      "width": 141,
+      "height": 47,
+      "offsetX": 5591175,
+      "offsetY": -342898
+    }
+  }
+}
