@@ -31,3 +31,31 @@
 - For issue or pull request alignment, inspect the working tree and recent commits before making claims about the current state.
 - After GitHub updates, re-read the affected issues or pull requests and verify titles, state, links, and descriptions.
 - Prefer concise, maintainable descriptions over duplicated implementation detail. Link to source files and technical documents instead of copying mutable code behavior into epics.
+
+## Out-of-Scope Findings
+
+When performing any task (tests, refactor, cleanup, verification) and encountering a bug, technical debt, or source-code problem **outside the requested scope**, report and stop:
+
+1. Point at the finding with precise location (file:line)
+2. Explain why it is a problem
+3. Stop and wait for instructions before proceeding
+
+This also applies to findings that surface *while verifying* your own work, not only while writing tests.
+
+Detecting an out-of-scope problem does **not** authorize fixing it, not "while we're at it", and not rewriting files or tests to accommodate it.
+
+## Verifying a Baseline Without Mutating the Working Tree
+
+When determining whether a failure is **yours** or **pre-existing**, do not alter the user's repository state:
+
+| Forbidden                                                | Safe alternative                                                  |
+| -------------------------------------------------------- | ----------------------------------------------------------------- |
+| `git stash`                                              | `git worktree add /tmp/<dir> HEAD` — separate directory, leaves the current tree untouched |
+| Hand-rewriting a file to simulate an earlier state       | `git show HEAD:<path> > /tmp/<file>` and compare in that environment |
+| `git checkout` over uncommitted work                     | `git worktree add` + `git diff` against the worktree              |
+
+General rule: **the user's working tree is read-only** unless the task explicitly requires writing to it. All diagnostic experiments happen in a separate temporary directory.
+
+If a diagnosis genuinely requires mutating the user's tree, ask for explicit authorization first.
+
+**When reporting a finding, perform no further working-tree verification maneuver**: report and stop.
