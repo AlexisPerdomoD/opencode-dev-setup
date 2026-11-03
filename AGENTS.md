@@ -40,7 +40,7 @@ When performing any task (tests, refactor, cleanup, verification) and encounteri
 2. Explain why it is a problem
 3. Stop and wait for instructions before proceeding
 
-This also applies to findings that surface *while verifying* your own work, not only while writing tests.
+This also applies to findings that surface _while verifying_ your own work, not only while writing tests.
 
 Detecting an out-of-scope problem does **not** authorize fixing it, not "while we're at it", and not rewriting files or tests to accommodate it.
 
@@ -48,11 +48,11 @@ Detecting an out-of-scope problem does **not** authorize fixing it, not "while w
 
 When determining whether a failure is **yours** or **pre-existing**, do not alter the user's repository state:
 
-| Forbidden                                                | Safe alternative                                                  |
-| -------------------------------------------------------- | ----------------------------------------------------------------- |
-| `git stash`                                              | `git worktree add /tmp/<dir> HEAD` — separate directory, leaves the current tree untouched |
-| Hand-rewriting a file to simulate an earlier state       | `git show HEAD:<path> > /tmp/<file>` and compare in that environment |
-| `git checkout` over uncommitted work                     | `git worktree add` + `git diff` against the worktree              |
+| Forbidden                                          | Safe alternative                                                                           |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `git stash`                                        | `git worktree add /tmp/<dir> HEAD` — separate directory, leaves the current tree untouched |
+| Hand-rewriting a file to simulate an earlier state | `git show HEAD:<path> > /tmp/<file>` and compare in that environment                       |
+| `git checkout` over uncommitted work               | `git worktree add` + `git diff` against the worktree                                       |
 
 General rule: **the user's working tree is read-only** unless the task explicitly requires writing to it. All diagnostic experiments happen in a separate temporary directory.
 
