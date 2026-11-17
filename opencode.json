@@ -6,7 +6,7 @@
       "github": {
         "type": "remote",
         "url": "https://api.githubcopilot.com/mcp/",
-        "disabled": false,
+        "disabled": true,
         "oauth": false,
         "headers": {
           "Authorization": "Bearer {env:AGENTS_GITHUB_TOKEN}"
@@ -17,6 +17,18 @@
         "command": ["uvx", "mcp-server-linkedin@latest"],
         "environment": {
           "UV_HTTP_TIMEOUT": "300"
+        },
+        "disabled": false
+      },
+      "slack": {
+        "type": "remote",
+        "url": "https://mcp.slack.com/mcp",
+        "oauth": {
+          "client_id": "{env:SLACK_MCP_CLIENT_ID}",
+          "client_secret": "{env:SLACK_MCP_CLIENT_SECRET}",
+          "callback_port": 3118,
+          "redirect_uri": "http://localhost:3118/callback",
+          "scope": "search:read.public search:read.private search:read.im search:read.mpim search:read.files search:read.users channels:history groups:history im:history mpim:history channels:read groups:read im:read mpim:read users:read users:read.email emoji:read files:read reactions:read canvases:read lists:read"
         },
         "disabled": true
       }
