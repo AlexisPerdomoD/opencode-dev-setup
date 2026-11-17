@@ -10,7 +10,7 @@
 - Do not put progress percentages, checklists, dates, pending-work tables, or mutable implementation status in an epic description.
 - Track progress through child issues and their GitHub state. Link new work to the appropriate parent issue when the repository supports issue hierarchies.
 - Keep implementation status, current gaps, acceptance criteria, dependencies, and out-of-scope items in the child issues where they can be updated independently.
-- When an implementation changes, update affected child issues if their descriptions no longer match the code. Do not rewrite an epic for every implementation change.
+- When an implementation changes semantics, align the whole issue tree as described in [Semantic Changes and the Issue Tree](#semantic-changes-and-the-issue-tree), not just the issue in hand.
 - Preserve the distinction between an architectural contract and a concrete infrastructure implementation. Do not claim a provider, integration, endpoint, or capability is implemented unless it exists in the repository and is wired into the running application.
 - Separate completed foundations from deferred integrations. For example, an abstraction or local stub does not mean that the production provider is implemented.
 - Do not mix unrelated capabilities into an issue. Split a new concern into a separate issue and link dependencies explicitly.
@@ -18,9 +18,26 @@
 - When an issue is blocked by an external team or decision, document the exact dependency and keep the implementation scope separate from that external task.
 - Use concrete repository paths, symbols, endpoints, and contracts in issue descriptions. Remove stale names and historical routes when the implementation has changed.
 
+## Semantic Changes and the Issue Tree
+
+A **semantic change** is any change to the meaning of a field, column, state, transition, error code, contract, event, or flow. Code that enforces a new meaning while the issue tree still documents the old one leaves the project with two sources of truth.
+
+When such a change appears while implementing a PR:
+
+1. **Start at the root.** Identify the root issue of the tree being worked on (the epic), even when the task belongs to a child issue. The root owns the contract: purpose, glossary, invariants, decisions, and references.
+2. **Review the whole tree.** Read the root, its sub-epics, and the task issues. List every place describing the old semantics: fields, columns, statuses, error codes, diagrams, acceptance criteria, examples, and dependencies.
+3. **Keep one source of truth.** Put the contract in the root or in the sub-epic that owns it, and make the children reference it instead of restating it. Delete duplicated definitions rather than updating the same rule in several places.
+4. **Align before or with the code.** Update the issues in the same PR or before it. Never merge an implementation whose documented semantics disagree with the code.
+5. **Report what changed.** In the PR description, list the issues updated and the decision that changed.
+6. **Respect history.** Closed issues are historical records: do not rewrite them. Fix the open tree and note any stale reference worth keeping.
+
+When a decision replaces an earlier one, record it explicitly in the owning issue: what changed, why, and what it supersedes. Update the dependency map and the parent/child links if the change moves work between issues.
+
 ## Pull Requests
 
 - Before creating a pull request, search for and use the repository pull request template if one exists.
+- **Always link the issue with a closing keyword.** Include `Closes #<n>` in the PR description, one line per issue, so GitHub closes the linked issue automatically on merge. GitHub accepts `close`, `closes`, `closed`, `fix`, `fixes`, `fixed`, `resolve`, `resolves` and `resolved`; never rely on the title or an informal mention.
+- **Closing keywords only fire against the default branch.** A task PR whose base is an integration branch (`feat/<ctx>/<se>-<slug>`) does not auto-close its issue: close it explicitly after the merge, or make sure the stable PR carries `Closes #<n>`.
 - Align the pull request description with the actual diff and current runtime behavior.
 - State clearly what is included, what is intentionally excluded, how it was verified, and which follow-up issues contain deferred work.
 - Do not describe a stub, mock, interface, or test double as a production integration.
